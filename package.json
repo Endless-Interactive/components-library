@@ -1,5 +1,5 @@
 {
-  "name": "@Endless-Interactive/components-library",
+  "name": "@endless-interactive/components-library",
   "version": "0.0.3",
   "scripts": {
     "dev": "vite dev",
