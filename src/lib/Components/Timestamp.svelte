@@ -1,10 +1,10 @@
-<script lang="ts">
+<script>
 	import {onMount} from "svelte";
 
   let className;
   export { className as class };
-	export let date: Date = new Date();
-	export let locale: String = "en";
+	export let date = new Date();
+	export let locale = "en";
 
 	let displayTime = "";
 
@@ -18,7 +18,7 @@
 		displayTime = formatter.format(-time, timeframe);
 	}
 
-	function getTime(time: Number) : {time: Number, timeframe: String} {
+	function getTime(time) {
 		const years = Math.floor(time / (1000 * 60 * 60 * 24 * 365));
 		if (years > 0) return {time: years, timeframe: 'years'};
 
@@ -39,13 +39,13 @@
 	}
 
 	onMount(() => {
-		convertTime();
-
-		// Update time every second to provide a live update
+    // Update time every second to provide a live update
 		setInterval(() => {
 			convertTime();
 		}, 1000);
 	});
+
+  convertTime();
 </script>
 
 <p class={className}>{displayTime}</p>

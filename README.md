@@ -1,38 +1,45 @@
-# create-svelte
+# components-library
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+## Features
+-[x] Timestamp
+- [x] Form validation
+  - [x] Custom validation rules
+  - [x] Text
+    - [x] Email
+    - [x] Min/Max length
+    - [x] Required
+  - [x] Number (Requires string to be a number)
+    - [x] Min/Max value
+  - [ ] Checkbox/Radio
+    - [ ] Required
+  - [ ] Select
+    - [ ] Required
+  - [ ] Multiple
+    - [ ] Required
 
-## Creating a project
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Validation
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+### Custom validation rules
+```js
+// Custom validation function without parameters
+function custom(value) {
+    const passed = value === "hello";
+    return { passed, reason: 'This field must say "hello"' };
+}
 
-# create a new project in my-app
-npm create svelte@latest my-app
+// This input will only allow the word "hello"
+<input type="text" use:validate={custom} />
+
+
+// Custom validation function with parameters
+function custom(text) {
+  return function(value) {
+    const passed = value === text;
+    return { passed, reason: `This field must say "${text}"` };
+  }
+}
+
+// This input will only allow the word "hello"
+<input type="text" use:validate={custom("hello")} />
 ```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
