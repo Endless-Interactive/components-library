@@ -1,7 +1,6 @@
 import "@testing-library/jest-dom";
 import { Form } from "../index.js";
-import { fireEvent, render, waitFor } from "@testing-library/svelte";
-import CheckboxTest from "../Validation/Tests/CheckboxTest.svelte";
+import { fireEvent, render } from "@testing-library/svelte";
 
 test("Component renders", () => {
   const comp = render(Form);
