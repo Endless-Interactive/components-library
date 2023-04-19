@@ -33,6 +33,10 @@
   }
 
   function validationChanged(bool) {
+    dispatch("changed", {
+      passed: bool
+    });
+
     canSubmit = bool;
   }
 </script>
@@ -56,6 +60,8 @@
   <form
     use:validateForm
     on:changed={(e) => validationChanged(e.detail.passed)}
+    on:success={() => dispatch("success")}
+    on:failed={(e) => dispatch("failed", { errors: e.detail.errors })}
     class={className}
     on:submit|preventDefault={submit}
   >

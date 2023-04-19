@@ -16,8 +16,9 @@ export function validateForm(node) {
 }
 
 export function validate(node, rules) {
-  if (data[lastId] === undefined) {
-    data[lastId] = {
+  const id = lastId;
+  if (data[id] === undefined) {
+    data[id] = {
       node: null,
       values: []
     };
@@ -27,7 +28,7 @@ export function validate(node, rules) {
     rules = [rules];
   }
 
-  data[lastId].values.push({ node, rules });
+  data[id].values.push({ node, rules });
 
   function handleInput(event) {
     let value = event.target.value;
@@ -40,14 +41,16 @@ export function validate(node, rules) {
 
     const { passed, errors } = checkRules(rules, value);
 
-    node.dispatchEvent(new CustomEvent("changed", { detail: { passed } }));
+    console.log(passed)
+
+    node.dispatchEvent(new CustomEvent("changed", { detail: { passed, "_t": Date.now() } }));
 
     if (passed)
-      node.dispatchEvent(new CustomEvent("success"));
+      node.dispatchEvent(new CustomEvent("success", { detail: { "_t": Date.now() } }));
     else
-      node.dispatchEvent(new CustomEvent("failed", { detail: { errors } }));
+      node.dispatchEvent(new CustomEvent("failed", { detail: { errors, "_t": Date.now() } }));
 
-    checkAllRules();
+    checkAllRules(id);
   }
 
   node.addEventListener("input", handleInput);
@@ -70,16 +73,22 @@ function checkRules(rules, value) {
   return { passed, errors };
 }
 
-function checkAllRules() {
-  for (let id in data) {
-    let { node, values } = data[id];
+function checkAllRules(id) {
+  let form = data[id];
+  let allErrors = [];
 
-    let isValid = values.map(({ node, rules }) => {
-      return checkRules(rules, node.value).passed;
-    }).every(Boolean);
+  let isValid = form.values.map(({ node, rules }) => {
+    const { errors, passed } = checkRules(rules, node.value);
 
-    node.dispatchEvent(new CustomEvent("changed", { detail: { passed: isValid } }));
+    allErrors = allErrors.concat(errors);
 
-    node.dispatchEvent(new CustomEvent(isValid ? "success" : "failed"));
-  }
+    return passed;
+  }).every(Boolean);
+
+  form.node.dispatchEvent(new CustomEvent("changed", { detail: { passed: isValid, "_t": Date.now() } }));
+
+  if (isValid)
+    form.node.dispatchEvent(new CustomEvent("success", { detail: { "_t": Date.now() } }));
+  else
+    form.node.dispatchEvent(new CustomEvent("failed", { detail: { errors: allErrors, "_t": Date.now() } }));
 }

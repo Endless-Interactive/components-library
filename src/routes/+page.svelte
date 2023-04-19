@@ -5,12 +5,16 @@
   import Input from "./Input.svelte";
 
   let timestamp2 = new Date(Date.now() + 60000);
+
+  function handleChange(e) {
+    console.log(`Form changed: ${e.detail.passed}`)
+  }
 </script>
 
 <Timestamp />
 <Timestamp date={timestamp2} />
 
-<Form>
+<Form on:changed={handleChange} on:success={() => console.log("Form Passing")} on:failed={(e) => console.log("failed", e)}>
   <Input name="Email" rules={[required, email]}></Input>
   <Input name="Username" rules={[required]}></Input>
 </Form>
