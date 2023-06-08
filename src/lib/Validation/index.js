@@ -41,8 +41,6 @@ export function validate(node, rules) {
 
     const { passed, errors } = checkRules(rules, value);
 
-    console.log(passed)
-
     node.dispatchEvent(new CustomEvent("changed", { detail: { passed, "_t": Date.now() } }));
 
     if (passed)
