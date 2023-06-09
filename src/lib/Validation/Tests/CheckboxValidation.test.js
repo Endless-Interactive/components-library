@@ -23,12 +23,12 @@ test("Checkbox is checked when clicked", () => {
   expect(checkbox).toBeChecked();
 });
 
-test("Form can not be submitted when checkbox is unchecked", () => {
+test("Form can not be submitted when checkbox is unchecked", async () => {
   const { getByText, component } = render(CheckboxTest);
 
   const submit = getByText(/submit/i);
 
-  fireEvent.click(submit);
+  await fireEvent.click(submit);
   const mock = vi.fn();
 
   component.$on("submit", mock);

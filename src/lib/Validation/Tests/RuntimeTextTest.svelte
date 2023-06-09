@@ -1,17 +1,20 @@
 <script>
-  import { Form } from "../../index.js";
+  import { Form, required } from "../../index.js";
   import Input from "../../../routes/Input.svelte";
-  import { required } from "../rules.js";
   import { createEventDispatcher } from "svelte";
+  export let show = false;
 
   const dispatch = createEventDispatcher();
 
   function submit(e) {
-    console.log(e);
     dispatch('submit', e.details)
   }
 </script>
 
 <Form on:submit={submit}>
-  <Input type="checkbox" name="checkbox" rules={[required]}></Input>
+  <Input name="text" rules={required}></Input>
+
+  {#if show}
+    <Input name="text2" rules={required}></Input>
+  {/if}
 </Form>
